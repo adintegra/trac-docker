@@ -1,4 +1,4 @@
-FROM ubuntu:xenial
+FROM ubuntu:bionic
 MAINTAINER = Di Xu <stephenhsu90@gmail.com>
 ENV TRAC_ADMIN_NAME trac_admin
 ENV TRAC_ADMIN_PASSWD passw0rd
@@ -8,6 +8,19 @@ ENV TRAC_INI $TRAC_DIR/conf/trac.ini
 ENV DB_LINK sqlite:db/trac.db
 EXPOSE 8123
 
+# Ubuntu 20
+# Not fully functional, as v3 of Python is now standard - ymmv
+# RUN apt-get update
+# RUN apt-get --assume-yes install software-properties-common
+# RUN add-apt-repository universe
+# RUN apt-get update
+# RUN apt-get install --assume-yes python2 curl
+# RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
+# RUN python2 get-pip.py
+
+# Ubuntu 18
+ENV TZ=Europe/Zurich
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && apt-get install -y trac python-babel \
    libapache2-mod-wsgi python-pip && apt-get -y clean
 RUN pip install --upgrade Babel Trac
